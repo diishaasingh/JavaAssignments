@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+//import javax.servlet.ServletException;
+//import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
+
+public class LoginServlet extends jakarta.servlet.http.HttpServlet{
+    private static final long serialVersionUID = 1L;
+    
+    // Map to store username-password pairs
+    private Map<String, String> users;
+
+    @Override
+    public void init() throws jakarta.servlet.ServletException {
+        super.init();
+        
+        // Load usernames and passwords from file and populate the map
+        users = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("user_credentials.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split("=");
+                if (parts.length == 2) {
+                    users.put(parts[0], parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response)
+            throws jakarta.servlet.ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        // Validate username and password
+        if (users.containsKey(username) && users.get(username).equals(password)) {
+            // Successful login
+            response.getWriter().println("Successfully logged in! Welcome, " + username);
+        } else {
+            // Invalid credentials
+            response.getWriter().println("<span style='color: red;'>Invalid credentials!</span>");
+        }
+    }
+}
