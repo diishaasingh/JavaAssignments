@@ -67,7 +67,7 @@ public class Mastermind {
 		Scanner scanner = new Scanner(System.in);
 
 		int[] computerNumber = generateUniqueCode();
-		System.out.println(Arrays.toString(computerNumber));
+		//System.out.println(Arrays.toString(computerNumber));
 
 		System.out.println("You have 10 chances to guess the 4 digit number.");
 
